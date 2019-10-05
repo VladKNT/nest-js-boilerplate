@@ -1,4 +1,5 @@
-import { Controller, Get, Post, Body } from '@nestjs/common';
+import { Controller, Get, Post, Body, UseGuards } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { UsersService } from './users.service';
 import { UserEntity } from '../database/models/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -12,6 +13,7 @@ export class UsersController {
     return this.usersService.create(user);
   }
 
+  @UseGuards(AuthGuard())
   @Get()
   findAll(): Promise<UserEntity[]> {
     return this.usersService.findAll();

@@ -19,4 +19,18 @@ export class UsersService {
   findAll(): Promise<UserEntity[]> {
     return this.userRepository.find();
   }
+
+  findById(id: number): Promise<UserEntity> {
+    return this.userRepository.findOne({ id });
+  }
+
+  async findByLogin(login: string): Promise<UserEntity> {
+    const response = await this.userRepository.findOne({ username: login });
+
+    if (response) {
+      return response;
+    }
+
+    return this.userRepository.findOne({ email: login });
+  }
 }

@@ -13,6 +13,9 @@ services:
       DB_PASSWORD: boilerplate
       DB_USER: boilerplate
       DB_NAME: boilerplate-dev
+      PASSWORD_SALT: 10
+      JWT_SECRET: wfd32sdcs
+      JWT_EXPIRY: 60s
     volumes:
       - "./:/nest-js-boilerplate/"
     ports:

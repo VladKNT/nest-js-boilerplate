@@ -1,10 +1,13 @@
 import { Entity, Column, PrimaryGeneratedColumn, BeforeInsert, CreateDateColumn, UpdateDateColumn } from 'typeorm';
-import { hash } from 'bcrypt';
+import { PasswordHelper } from '../../helpers/password.helper';
 
 @Entity('user')
 export class UserEntity {
   @PrimaryGeneratedColumn()
-  id: string;
+  id: number;
+
+  @Column({ length: 32, unique: true })
+  username: string;
 
   @Column({ length: 32, unique: true })
   email: string;
@@ -20,6 +23,6 @@ export class UserEntity {
 
   @BeforeInsert()
   public async hashPasswordBeforeInsert(): Promise<void> {
-    this.password = await hash(this.password, 10);
+    this.password = await PasswordHelper.hashPassword(this.password);
   }
 }
