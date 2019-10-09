@@ -3,27 +3,15 @@ import { sign, decode, verify } from 'jsonwebtoken';
 
 @Injectable()
 export class JwtService {
-  async sign(payload, secret, options) {
-    try {
-      return await sign(payload, secret, options);
-    } catch (error) {
-      throw new Error(error);
-    }
+  async sign(payload, secret, options): Promise<string> {
+    return sign(payload, secret, options);
   }
 
-  async verify(token: string, secret: string) {
-    try {
-      return await verify(token, secret);
-    } catch (error) {
-      throw new Error(error);
-    }
+  async verify(token: string, secret: string): Promise<object | string> {
+    return verify(token, secret);
   }
 
-  async decode(token: string) {
-    try {
-      return await decode(token);
-    } catch (error) {
-      throw new Error(error);
-    }
+  async decode(token: string): Promise<null | { [key: string]: any } | string> {
+    return decode(token);
   }
 }

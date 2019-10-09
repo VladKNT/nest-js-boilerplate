@@ -8,6 +8,7 @@ import { CreateUserDto } from '../dto/create-user.dto';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  @UseGuards(AuthGuard())
   @Post()
   async create(@Body() user: CreateUserDto): Promise<User> {
     return this.usersService.create(user);

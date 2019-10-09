@@ -8,6 +8,7 @@ import { UsersService } from '../../users/services/users.service';
 import { User } from '../../../database/models/user.entity';
 import { Password } from '../../../../lib/password/password';
 import { tokenConfig } from '../../../../resources/config/tokenConfig';
+import { TokenPairInterface } from '../interfaces/tokenPair.interface';
 
 @Injectable()
 export class AuthService {
@@ -19,7 +20,7 @@ export class AuthService {
     private readonly usersService: UsersService,
   ) {}
 
-  async validateUser(login: string, password: string): Promise<any> {
+  async validateUser(login: string, password: string): Promise<User | null> {
     const user = await this.usersService.findByLogin(login);
 
     if (user && await Password.comparePassword(password, user.password)) {
@@ -29,7 +30,7 @@ export class AuthService {
     return null;
   }
 
-  async login(user: User) {
+  async login(user: User): Promise<TokenPairInterface> {
     const tokenPair = await this.tokenService.generateTokenPair(user);
     const refreshToken = Object.assign(new RefreshToken(), { token: tokenPair.refreshToken, user });
     await this.refreshTokenRepository.save(refreshToken);
@@ -37,7 +38,7 @@ export class AuthService {
     return tokenPair;
   }
 
-  async refreshToken(token: string) {
+  async refreshToken(token: string): Promise<TokenPairInterface> {
     const { secret, type } = tokenConfig.refresh;
     const decodedToken: any = await this.jwtService.decode(token);
     const currentDate = new Date();
